@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Votre métier au quotidien – questionnaire</title>
+<meta name="description" content="Questionnaire de 3 minutes sur les difficultés du quotidien des traiteurs, paysagistes, élagueurs, restaurants, bars et garagistes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fond: #EEF1EA;
+    --papier: #FFFFFF;
+    --encre: #1C2A22;
+    --doux: #5B6B61;
+    --trait: #C9D2C8;
+    --vert: #2E5E45;
+    --surligne: #F2C94C;
+    --erreur: #A3301F;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html, body { margin: 0; }
+  body {
+    background: var(--fond);
+    color: var(--encre);
+    font-family: "Bricolage Grotesque", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 40px 20px 64px; }
+
+  header h1 {
+    font-size: clamp(2rem, 7vw, 2.9rem);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+  }
+  header p { margin: 0 0 10px; color: var(--doux); max-width: 34em; }
+  header .qui { color: var(--encre); }
+
+  form { margin-top: 36px; }
+  fieldset { border: 0; margin: 0 0 34px; padding: 0; min-width: 0; }
+  legend, .label {
+    display: block;
+    font-weight: 700;
+    font-size: 1.15rem;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    padding: 0;
+  }
+  .aide { display: block; font-weight: 400; font-size: 0.95rem; color: var(--doux); margin-top: 4px; }
+
+  /* Choix en pastilles, faciles à toucher sur téléphone */
+  .choix { display: flex; flex-wrap: wrap; gap: 10px; }
+  .choix label { position: relative; cursor: pointer; }
+  .choix input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .choix span {
+    display: inline-block;
+    padding: 11px 16px;
+    border: 1.5px solid var(--trait);
+    border-radius: 999px;
+    background: var(--papier);
+    font-size: 1rem;
+    transition: background .15s, border-color .15s;
+  }
+  .choix input:checked + span { background: var(--encre); border-color: var(--encre); color: #fff; }
+  .choix input:focus-visible + span { outline: 3px solid var(--surligne); outline-offset: 2px; }
+
+  input[type="text"], textarea {
+    width: 100%;
+    font: inherit;
+    color: var(--encre);
+    background: var(--papier);
+    border: 1.5px solid var(--trait);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  input[type="text"]:focus, textarea:focus { outline: 3px solid var(--surligne); outline-offset: 1px; border-color: var(--encre); }
+  textarea { resize: vertical; min-height: 120px; }
+
+  /* La question principale : une feuille de carnet */
+  .principale {
+    background: var(--papier);
+    border-radius: 14px;
+    padding: 22px 20px 20px;
+    border-left: 6px solid var(--surligne);
+  }
+  .principale legend, .principale .label { font-size: 1.35rem; }
+  .principale textarea {
+    border: 0;
+    border-radius: 0;
+    padding: 0 2px;
+    min-height: 200px;
+    line-height: 34px;
+    background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--trait) 33px, var(--trait) 34px);
+    background-attachment: local;
+  }
+  .principale textarea:focus { outline: none; }
+  .principale:focus-within { box-shadow: 0 0 0 3px var(--surligne); }
+
+  .autre { margin-top: 12px; }
+  .cache { display: none; }
+  .pot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .envoyer {
+    font: inherit;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+    background: var(--vert);
+    border: 0;
+    border-radius: 12px;
+    padding: 16px 26px;
+    width: 100%;
+    cursor: pointer;
+  }
+  .envoyer:hover { background: #244C37; }
+  .envoyer:focus-visible { outline: 3px solid var(--surligne); outline-offset: 3px; }
+  .envoyer[disabled] { opacity: .6; cursor: wait; }
+
+  .message { margin-top: 14px; font-size: 1rem; }
+  .message.erreur { color: var(--erreur); }
+  .confidentiel { font-size: .9rem; color: var(--doux); margin-top: 18px; }
+
+  .merci { background: var(--papier); border-radius: 14px; padding: 32px 24px; border-left: 6px solid var(--vert); }
+  .merci h2 { font-size: 1.8rem; line-height: 1.15; margin: 0 0 10px; }
+  .merci p { margin: 0; color: var(--doux); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Qu'est-ce qui vous complique la vie dans votre métier ?</h1>
+    <p class="qui">Je m'appelle Nils, je suis étudiant à Angers.</p>
+    <p>Je veux créer un outil vraiment utile, en partant de vos problèmes réels plutôt que de mes idées. Six questions, environ 3 minutes.</p>
+  </header>
+
+  <form id="sondage" novalidate>
+    <fieldset>
+      <legend>Quel est votre métier ?</legend>
+      <div class="choix" role="radiogroup">
+        <label><input type="radio" name="metier" value="Traiteur" required><span>Traiteur</span></label>
+        <label><input type="radio" name="metier" value="Paysagiste ou élagueur"><span>Paysagiste ou élagueur</span></label>
+        <label><input type="radio" name="metier" value="Restaurant, bar ou brasserie"><span>Restaurant, bar ou brasserie</span></label>
+        <label><input type="radio" name="metier" value="Garagiste"><span>Garagiste</span></label>
+        <label><input type="radio" name="metier" value="Autre"><span>Autre</span></label>
+      </div>
+      <div class="autre cache" id="bloc-autre">
+        <label class="label" for="metier_autre" style="font-size:1rem">Lequel ?</label>
+        <input type="text" id="metier_autre" name="metier_autre" maxlength="200" autocomplete="organization-title">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Combien de personnes travaillent dans votre entreprise, vous compris ?</legend>
+      <div class="choix" role="radiogroup">
+        <label><input type="radio" name="taille" value="Seul"><span>Seul</span></label>
+        <label><input type="radio" name="taille" value="2 à 5"><span>2 à 5</span></label>
+        <label><input type="radio" name="taille" value="6 à 15"><span>6 à 15</span></label>
+        <label><input type="radio" name="taille" value="Plus de 15"><span>Plus de 15</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="principale">
+      <label class="label" for="probleme">Qu'est-ce qui vous fait perdre le plus de temps ou d'argent chaque semaine ?
+        <span class="aide">Racontez comme vous le diriez à un collègue. Même un détail qui vous agace compte.</span>
+      </label>
+      <textarea id="probleme" name="probleme" maxlength="5000" required></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Comment gérez-vous ça aujourd'hui ?
+        <span class="aide">Plusieurs réponses possibles.</span>
+      </legend>
+      <div class="choix">
+        <label><input type="checkbox" name="gestion" value="Papier ou carnet"><span>Papier ou carnet</span></label>
+        <label><input type="checkbox" name="gestion" value="Excel ou tableur"><span>Excel ou tableur</span></label>
+        <label><input type="checkbox" name="gestion" value="WhatsApp ou SMS"><span>WhatsApp ou SMS</span></label>
+        <label><input type="checkbox" name="gestion" value="Un logiciel"><span>Un logiciel</span></label>
+        <label><input type="checkbox" name="gestion" value="Je ne le gère pas vraiment"><span>Je ne le gère pas vraiment</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <label class="label" for="logiciel">Si vous utilisez un logiciel : lequel, combien coûte-t-il par mois, et qu'est-ce qui vous agace dedans ?
+        <span class="aide">Facultatif.</span>
+      </label>
+      <textarea id="logiciel" name="logiciel" maxlength="3000"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Si un outil réglait vraiment ce problème, combien seriez-vous prêt à payer par mois ?</legend>
+      <div class="choix" role="radiogroup">
+        <label><input type="radio" name="prix" value="Rien"><span>Rien</span></label>
+        <label><input type="radio" name="prix" value="Moins de 20 €"><span>Moins de 20 €</span></label>
+        <label><input type="radio" name="prix" value="20 à 50 €"><span>20 à 50 €</span></label>
+        <label><input type="radio" name="prix" value="50 à 100 €"><span>50 à 100 €</span></label>
+        <label><input type="radio" name="prix" value="Plus de 100 €"><span>Plus de 100 €</span></label>
+      </div>
+    </fieldset>
+
+    <div class="pot" aria-hidden="true">
+      <label for="site">Ne pas remplir</label>
+      <input type="text" id="site" name="site" tabindex="-1" autocomplete="off">
+    </div>
+
+    <button type="submit" class="envoyer" id="bouton">Envoyer mes réponses</button>
+    <p class="message" id="message" role="status" aria-live="polite"></p>
+    <p class="confidentiel">Vos réponses sont anonymes : je ne vous demande ni nom ni coordonnées. Elles servent uniquement à comprendre les besoins de votre métier.</p>
+  </form>
+
+  <section class="merci cache" id="merci" tabindex="-1">
+    <h2>Merci, c'est envoyé.</h2>
+    <p>Votre réponse m'aide à construire quelque chose d'utile pour votre métier.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var URL_API = "https://eqvbksxfwlgbcxgqljqn.supabase.co/rest/v1/sondage_reponses";
+  var CLE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxdmJrc3hmd2xnYmN4Z3FsanFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3OTY2NDMsImV4cCI6MjEwNDM3MjY0M30.Sl2aRWh1vTAsvqEB_k_Fy_ntopk2RrYZUSRN_p-_8m8";
+
+  var form = document.getElementById("sondage");
+  var message = document.getElementById("message");
+  var bouton = document.getElementById("bouton");
+  var blocAutre = document.getElementById("bloc-autre");
+
+  // Lien personnalisé par métier : ?m=traiteur, ?m=paysagiste, ?m=restaurant ou ?m=garagiste
+  var params = new URLSearchParams(window.location.search);
+  var source = (params.get("m") || "direct").slice(0, 50);
+  var correspondance = {
+    traiteur: "Traiteur",
+    paysagiste: "Paysagiste ou élagueur",
+    restaurant: "Restaurant, bar ou brasserie",
+    garagiste: "Garagiste"
+  };
+  if (correspondance[source]) {
+    var pre = form.querySelector('input[name="metier"][value="' + correspondance[source] + '"]');
+    if (pre) pre.checked = true;
+  }
+
+  form.addEventListener("change", function (e) {
+    if (e.target.name === "metier") {
+      var autre = e.target.value === "Autre";
+      blocAutre.classList.toggle("cache", !autre);
+      if (autre) document.getElementById("metier_autre").focus();
+    }
+  });
+
+  function valeur(nom) {
+    var el = form.querySelector('input[name="' + nom + '"]:checked');
+    return el ? el.value : null;
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    message.textContent = "";
+    message.className = "message";
+
+    if (form.site.value) return; // robot
+
+    var metier = valeur("metier");
+    var probleme = form.probleme.value.trim();
+
+    if (!metier) {
+      message.textContent = "Choisissez votre métier en haut du questionnaire.";
+      message.className = "message erreur";
+      form.querySelector('input[name="metier"]').focus();
+      return;
+    }
+    if (probleme.length < 3) {
+      message.textContent = "Décrivez en quelques mots ce qui vous fait perdre du temps ou de l'argent.";
+      message.className = "message erreur";
+      form.probleme.focus();
+      return;
+    }
+
+    var gestion = Array.prototype.map.call(
+      form.querySelectorAll('input[name="gestion"]:checked'),
+      function (el) { return el.value; }
+    );
+
+    var donnees = {
+      metier: metier,
+      metier_autre: metier === "Autre" ? (form.metier_autre.value.trim() || null) : null,
+      taille: valeur("taille"),
+      probleme: probleme,
+      gestion: gestion.length ? gestion : null,
+      logiciel: form.logiciel.value.trim() || null,
+      prix: valeur("prix"),
+      source: source
+    };
+
+    bouton.disabled = true;
+    bouton.textContent = "Envoi en cours…";
+
+    fetch(URL_API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": CLE,
+        "Authorization": "Bearer " + CLE,
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(donnees)
+    }).then(function (rep) {
+      if (!rep.ok) throw new Error("statut " + rep.status);
+      form.classList.add("cache");
+      var merci = document.getElementById("merci");
+      merci.classList.remove("cache");
+      merci.focus();
+      window.scrollTo(0, 0);
+    }).catch(function () {
+      bouton.disabled = false;
+      bouton.textContent = "Envoyer mes réponses";
+      message.textContent = "L'envoi n'a pas abouti. Vérifiez votre connexion internet, puis appuyez de nouveau sur « Envoyer mes réponses ».";
+      message.className = "message erreur";
+    });
+  });
+})();
+</script>
+</body>
+</html>
